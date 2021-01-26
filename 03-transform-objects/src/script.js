@@ -10,23 +10,36 @@ const scene = new THREE.Scene()
 /**
  * Objects
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-const mesh = new THREE.Mesh(geometry, material)
 
-// Position
-// mesh.position.x = 0.7 // move right/left
-// mesh.position.y = -0.6 // move up/down
-// mesh.position.z = 1; // Camera zoom in/out
+ // Create a new group of objects
+const group = new THREE.Group()
+group.scale.y = 0.5
 
-mesh.position.set(0.7, -0.6, 1)
+// Directly instantiate the Mesh with the geometry and material as parameters
+const cubeA = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial( {color: 0x00ff00 })
+    )
+cubeA.position.set(2, 0, 0)
+group.add(cubeA)
 
-// Scale
-mesh.scale.set(2, 0.5, 0.5)
+const cubeB = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial( {color: 0xff0000 })
+    )
+cubeB.position.set(-2, 0, 0)
+group.add(cubeB)
 
-scene.add(mesh)
+const cubeC = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial( {color: 0x44DDFF })
+    )
+cubeC.position.set(0, 0, 0)
+group.add(cubeC)
 
-// Axes helper
+scene.add(group)
+
+// Axes helper to help visualize the scale of an object
 const axesHelper = new THREE.AxesHelper(2);
 scene.add(axesHelper)
 
@@ -48,12 +61,14 @@ camera.position.z = 3
 scene.add(camera)
 
 
-console.log(mesh.position.distanceTo(camera.position));
+
+// console.log(mesh.position.distanceTo(camera.position));
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
+
 renderer.setSize(sizes.width, sizes.height)
 renderer.render(scene, camera)

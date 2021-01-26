@@ -17,7 +17,7 @@ There are 4 ways to transform objects in THREEjs:
 1) Position
 2) Scale
 3) Rotation
-4) Quaterion 
+4) Quaternion 
 
 ### 1) Position
 Transforming an object could mean for example, translating it to a different position.
@@ -43,3 +43,19 @@ What's different is that we are altering the dimensions (ie. scale) of the objec
 
 
 ### 3) Rotation
+Rotating is a bit different. To rotate an object, we must give the parameter values a radian value (Math.PI). 
+
+    mesh.rotation.set((Math.PI * 0.25), Math.PI, Math.PI)
+
+### 4) Quaternion
+
+
+### Grouping objects
+Its purpose is to make working with groups of objects syntactically clearer:
+
+    const group = new THREE.Group()
+    group.add( cubeA )
+    group.add( cubeB )
+
+    scene.add(group)
+
