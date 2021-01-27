@@ -1,4 +1,5 @@
 # three-js-journey
+This is a personal documentation from the learning modules by Bruno Simon.
 
 ## Part 1: First Scene
 Setting up our first object will require 4 elements:
@@ -59,3 +60,13 @@ Its purpose is to make working with groups of objects syntactically clearer:
 
     scene.add(group)
 
+To simplify object creation, we can build the objects directly as part of the Mesh parameter as such:
+
+    const cubeA = new THREE.Mesh(
+        new THREE.BoxGeometry(1,1,1),
+        new THREE.MeshBasicMaterial( color: '0xff0000')
+    );
+
+We may follow the above formatting to create more instances of the an object and group them together to configure its position, scale, rotation, and quaternion. 
+
+## Part 5: Animating an object
