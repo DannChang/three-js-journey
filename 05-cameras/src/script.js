@@ -35,7 +35,7 @@ const scene = new THREE.Scene()
 
 // Object
 const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.TorusGeometry( 1, 0.3, 10, 20, Math.PI *2 ),
     new THREE.MeshBasicMaterial({ color: 0xff0000 })
 )
 scene.add(mesh)
@@ -46,7 +46,7 @@ const aspectRatio = sizes.width / sizes.height
 const camera = new THREE.PerspectiveCamera(75, aspectRatio)
 // camera.position.x = 2
 // camera.position.y = 2
-camera.position.z = 5
+camera.position.z = 3
 camera.lookAt(mesh.position)
 scene.add(camera)
 
@@ -54,7 +54,8 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 // enabels a trailing/accelating/smoothing when cursor moves object
 controls.enableDamping = true 
-controls.keys
+controls.autoRotate = true
+
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
