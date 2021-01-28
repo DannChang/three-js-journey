@@ -69,4 +69,10 @@ To simplify object creation, we can build the objects directly as part of the Me
 
 We may follow the above formatting to create more instances of the an object and group them together to configure its position, scale, rotation, and quaternion. 
 
-## Part 5: Animating an object
+## Part 4: Animating an object
+
+## Part 5: Cameras
+
+## Part 6: Fullscreen and Resizing
+
+## Part 7: Geometries
