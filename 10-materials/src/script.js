@@ -38,7 +38,13 @@ const scene = new THREE.Scene()
 // material.transparent = true
 // material.alphaMap = doorAlphaTexture
 
-const material = new THREE.MeshNormalMaterial
+// const material = new THREE.MeshNormalMaterial()
+
+const material = new THREE.MeshStandardMaterial()
+// material.metalness = 0.45
+// material.roughness = 0.65
+const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+scene.add( light );
 
 const sphere = new THREE.Mesh(
     new THREE.SphereBufferGeometry(0.5, 16, 16),
