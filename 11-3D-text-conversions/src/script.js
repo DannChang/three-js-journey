@@ -3,6 +3,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 
+
+
+
 /**
  * Base
  */
@@ -16,19 +19,58 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
+ * Axis Helper
+ */
+const axesHelper = new THREE.AxesHelper()
+scene.add(axesHelper)
+
+/**
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
 
 /**
- * Object
+ * Fonts
  */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
+const fontLoader = new THREE.FontLoader()
+
+fontLoader.load(
+    '/fonts/helvetiker_regular.typeface.json',
+    (font) => 
+    {
+        const textGeometry = new THREE.TextBufferGeometry(
+            'Dan Chang', 
+            {
+                font: font, 
+                size: 0.5,
+                height: 0.2,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 0.03,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 5
+            }
+        )
+        // Creating a text bound to center Text Object
+        textGeometry.computeBoundingBox()
+        textGeometry.translate(
+            - textGeometry.boundingBox.max.x * 0.5,
+            - textGeometry.boundingBox.max.y * 0.5,
+            - textGeometry.boundingBox.max.z * 0.5
+
+        )
+
+        const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
+        const text = new THREE.Mesh(textGeometry, textMaterial)
+        scene.add(text)
+    }
 )
 
-scene.add(cube)
+/**
+ * Object
+ */
+
 
 /**
  * Sizes
