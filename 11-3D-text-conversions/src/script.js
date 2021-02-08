@@ -53,14 +53,17 @@ fontLoader.load(
             }
         )
         // Creating a text bound to center Text Object
-        textGeometry.computeBoundingBox()
-        textGeometry.translate(
-            - textGeometry.boundingBox.max.x * 0.5,
-            - textGeometry.boundingBox.max.y * 0.5,
-            - textGeometry.boundingBox.max.z * 0.5
+        // Long and convoluted way to center the box geometry
+        // textGeometry.computeBoundingBox()
+        // textGeometry.translate(
+        //     - (textGeometry.boundingBox.max.x - 0.2) * 0.5,
+        //     - (textGeometry.boundingBox.max.y - 0.2) * 0.5,
+        //     - (textGeometry.boundingBox.max.z - 0.3) * 0.5
 
-        )
-
+        // )
+        
+        // The RIGHT way to center a Box Geometry
+        textGeometry.center()
         const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
         const text = new THREE.Mesh(textGeometry, textMaterial)
         scene.add(text)
