@@ -21,8 +21,8 @@ const scene = new THREE.Scene()
 /**
  * Axis Helper
  */
-const axesHelper = new THREE.AxesHelper()
-scene.add(axesHelper)
+// const axesHelper = new THREE.AxesHelper()
+// scene.add(axesHelper)
 
 /**
  * Textures
