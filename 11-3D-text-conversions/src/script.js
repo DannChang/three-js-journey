@@ -28,6 +28,8 @@ scene.add(axesHelper)
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
+const matcapTexture = textureLoader.load('/textures/matcaps/8.png')
+
 
 /**
  * Fonts
@@ -64,9 +66,35 @@ fontLoader.load(
         
         // The RIGHT way to center a Box Geometry
         textGeometry.center()
-        const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
+        const textMaterial = new THREE.MeshMatcapMaterial()
+        textMaterial.matcap = matcapTexture
         const text = new THREE.Mesh(textGeometry, textMaterial)
         scene.add(text)
+        
+        console.time('donuts time')
+
+        const donutGeometry = new THREE.TorusBufferGeometry(0.3, 0.2, 20, 45)
+        const donutMaterial = new THREE.MeshMatcapMaterial()
+        donutMaterial.matcap = matcapTexture
+
+        for(let i = 0; i < 500; i++) {
+            const donut = new THREE.Mesh(donutGeometry, donutMaterial)
+
+            donut.position.x = (Math.random() - 0.5) * 10
+            donut.position.y = (Math.random() - 0.5) * 10
+            donut.position.z = (Math.random() - 0.5) * 10
+
+            donut.rotation.x = Math.random() * Math.PI
+            donut.rotation.y = Math.random() * Math.PI
+            donut.rotation.z = Math.random() * Math.PI
+
+            const scaleValue = Math.random()
+            donut.scale.set(scaleValue, scaleValue, scaleValue)
+
+            scene.add(donut)
+        }
+
+        console.timeEnd('donuts time')
     }
 )
 
