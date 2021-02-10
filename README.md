@@ -76,3 +76,11 @@ We may follow the above formatting to create more instances of the an object and
 ## Part 6: Fullscreen and Resizing
 
 ## Part 7: Geometries
+
+
+## Part 13: Shadows
+In today's realm of high grade shadow rendering, we have Raytracing, which mimics real-life 3D rendering of shadows. However, we are unable to implement this due to its limitation of render time and consequently the compute time. 
+
+To create a shadow in THREEjs, we have to use an optimized method to cast our shadows onto our objects. Shadowmaps are used to project a pre-made shadow onto the object. Imagine a plane (the shadow map) and a directional light projecting onto it. We now have a guide for where the light should cast its shadow.
+
+To access the shadows, we must first instantiate the shadowmap member on each object and then enable it on our light source. 
