@@ -22,7 +22,7 @@ scene.add(ambientLight)
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
-const particleTexture = textureLoader.load('/textures/particles/2.png')
+const particleTexture = textureLoader.load('/textures/particles/10.png')
 
 /**
  * Particle Geometry
@@ -87,7 +87,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
+camera.position.z = 10
 scene.add(camera)
 
 // Controls
@@ -113,7 +113,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update particles
-    // particles.rotation.y = elapsedTime * 0.2 
+    particles.rotation.y = elapsedTime * 0.2 
     for(let i = 0; i < count; i++)
     {
         const i3 = i * 3
