@@ -123,10 +123,12 @@ const tick = () =>
     const objectsToTest = [object1, object2, object3]
     const intersects = raycaster.intersectObjects(objectsToTest)
 
+    // Change object color to red after object leaves rays
     for(const object of objectsToTest) {
         object.material.color.set('#ff0000')
     }
     
+    // Changes object color to blue if object lands on raycaster/intersects
     for(const intersect of intersects) {
         intersect.object.material.color.set('#0000ff')
     }
