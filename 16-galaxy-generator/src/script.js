@@ -25,7 +25,9 @@ const parameters =
     radius: 5,
     branches: 3,
     spin: 1,
-    randomness: 0.2
+    randomness: 0.2,
+    insideColor: '#ff6030',
+    outsideColor: '#1b3984'
 }
 
 let geometry = null
@@ -46,9 +48,16 @@ const generateGalaxy = () => {
     geometry = new THREE.BufferGeometry()
 
     const positions = new Float32Array(parameters.count * 3)
+    const colors = new Float32Array(parameters.count * 3)
+
+    const colorInside = new THREE.Color(parameters.insideColor)
+    const colorOutside = new THREE.Color(parameters.outsideColor)
+
 
     for(let i = 0; i < parameters.count; i++) {
         const i3 = i * 3
+
+
 
         const radius = Math.random() * parameters.radius
         const spinAngle = radius * parameters.spin
@@ -61,11 +70,22 @@ const generateGalaxy = () => {
         positions[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX
         positions[i3 + 1] = randomY
         positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
+        
+        // Mix the inside and outside colors
+        const mixedColor = colorInside.clone()
+        mixedColor.lerp(colorOutside, radius / parameters.radius)
+        colors[i3    ] = mixedColor.r
+        colors[i3 + 1] = mixedColor.g
+        colors[i3 + 2] = mixedColor.b
     }
     
     geometry.setAttribute(
         'position',
         new THREE.BufferAttribute(positions, 3)
+    )
+    geometry.setAttribute(
+        'color',
+        new THREE.BufferAttribute(colors, 3)
     )
 
     /**
@@ -75,7 +95,8 @@ const generateGalaxy = () => {
         size: parameters.size,
         sizeAttenuation: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        vertexColors: true
     })
 
     /**
