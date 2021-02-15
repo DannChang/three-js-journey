@@ -3,7 +3,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import CANNON from 'cannon'
-console.log(CANNON)
 
 /**
  * Debug
@@ -41,6 +40,21 @@ const environmentMapTexture = cubeTextureLoader.load([
 const world = new CANNON.World()
 world.gravity.set(0, -9.82, 0)
 
+// Materials
+const  defaultMaterial = new CANNON.Material('default')
+
+
+const defaultContactMaterial = new CANNON.ContactMaterial(
+    defaultMaterial,
+    defaultMaterial,
+    {
+        friction: 0.1,
+        restitution: 0.7
+    }
+)
+world.addContactMaterial(defaultContactMaterial)
+world.defaultContactMaterial = defaultContactMaterial
+
 // Sphere
 const sphereShape = new CANNON.Sphere(0.5)
 const sphereBody = new CANNON.Body({
@@ -59,6 +73,7 @@ floorBody.quaternion.setFromAxisAngle(
     new CANNON.Vec3(- 1, 0, 0),
     Math.PI * 0.5
 )
+
 world.addBody(floorBody)
 
 
@@ -70,7 +85,7 @@ const sphere = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         metalness: 0.3,
         roughness: 0.4,
-        envMap: environmentMapTexture
+        envMap: environmentMapTexture,
     })
 )
 sphere.castShadow = true
