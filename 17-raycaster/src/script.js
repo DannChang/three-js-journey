@@ -55,6 +55,7 @@ console.log(intersect)
 const intersects = raycaster.intersectObjects([object1, object2, object3])
 console.log(intersects)
 
+let currentIntersect = null
 /**
  * Sizes
  */
@@ -104,9 +105,29 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const mouse = new THREE.Vector2()
 
-window.addEventListener('mousemove', () => {
+window.addEventListener('mousemove', (event) => {
     mouse.x = event.clientX / sizes.width * 2 - 1
     mouse.y = - (event.clientY / sizes.height) * 2 + 1
+})
+
+window.addEventListener('click', () => {
+    if(currentIntersect)
+    {
+        switch(currentIntersect.object)
+        {
+            case object1:
+                console.log('click on object 1')
+                break
+
+            case object2:
+                console.log('click on object 2')
+                break
+
+            case object3:
+                console.log('click on object 3')
+                break
+        }
+    }
 })
 
 /**
@@ -136,6 +157,7 @@ const tick = () =>
 
     const objectsToTest = [object1, object2, object3]
     const intersects = raycaster.intersectObjects(objectsToTest)
+    
 
     // Change object color to red after object leaves rays
     for(const object of objectsToTest) {
@@ -145,6 +167,18 @@ const tick = () =>
     // Changes object color to blue if object lands on raycaster/intersects
     for(const intersect of intersects) {
         intersect.object.material.color.set('#0000ff')
+    }
+
+    if(intersects.length) {
+        if(currentIntersect === null) {
+            console.log('mouse enter')
+        }
+        currentIntersect = intersects[0]
+    } else {
+        if(currentIntersect) {
+            console.log('mouse leaves')
+        }
+        currentIntersect = null
     }
 
     // Update controls
