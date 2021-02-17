@@ -1,7 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import * as dat from 'dat.gui'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+
 
 /**
  * Base
@@ -14,6 +17,72 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+/**
+ * Models
+ */
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('/draco/')
+
+const gltfLoader = new GLTFLoader()
+gltfLoader.setDRACOLoader(dracoLoader)
+
+let mixer = null
+
+// gltfLoader.load(
+//     '/models/Fox/glTF/Fox.gltf',
+//     (gltf) => {
+//         mixer = new THREE.AnimationMixer(gltf.scene)
+//         const action = mixer.clipAction(gltf.animations[2])
+
+//         action.play()
+
+//         console.log(gltf.scene.animations)
+
+//         gltf.scene.scale.set(0.025, 0.025, 0.025)
+//         scene.add(gltf.scene)
+//     }
+// )
+
+
+// gltfLoader.load(
+//     '/models/Duck/glTF-Draco/Duck.gltf',
+//     (gltf) => {
+//         // console.log(gltf.scene.children[0])
+//         scene.add(gltf.scene)
+//     }
+// )
+gltfLoader.load(
+    '/models/Volvo/glTF/scene.gltf',
+    (gltf) => {
+        console.log(gltf.scenes[0])
+        gltf.scenes[0].scale.set(0.25, 0.25, 0.25)
+        gltf.scenes[0].position.set(0, -0.17, 0)
+        scene.add(gltf.scenes[0])
+    }
+)
+
+// Particle Materials
+const particlesMaterial = new THREE.PointsMaterial()
+particlesMaterial.size = 0.02
+particlesMaterial.sizeAttenuation = true
+
+// Geometry
+const particlesGeometry = new THREE.BufferGeometry()
+const count = 500
+
+const positions = new Float32Array(count * 3) // Multiply by 3 because each position is composed of 3 values (x, y, z)
+
+for(let i = 0; i < count * 3; i++) // Multiply by 3 for same reason
+{
+    positions[i] = (Math.random() - 0.5) * 10 // Math.random() - 0.5 to have a random value between -0.5 and +0.5
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)) // Create the Three.js BufferAttribute and specify that each information is composed of 3 values
+
+// Points
+const particles = new THREE.Points(particlesGeometry, particlesMaterial)
+scene.add(particles)
 
 /**
  * Floor
@@ -75,7 +144,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(2, 2, 2)
+camera.position.set(-3, 2, 2)
 scene.add(camera)
 
 // Controls
@@ -105,6 +174,16 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    // Update particles
+    
+    particles.position.y = - elapsedTime * 0.2
+
+
+    // Update mixer
+    if(mixer !== null) {
+        mixer.update(deltaTime)
+    }
 
     // Update controls
     controls.update()
