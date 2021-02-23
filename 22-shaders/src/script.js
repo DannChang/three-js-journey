@@ -28,12 +28,23 @@ const textureLoader = new THREE.TextureLoader()
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
+// 1089 vertices from PlaneGeometry
+const verticesCount = geometry.attributes.position.count
+const randoms = new Float32Array(verticesCount)
+
+// Fill an array of random numbers for each vertices
+for(let i = 0; i < verticesCount; i++) {
+    randoms[i] = Math.random()
+}
+
+geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1))
+
 // Material
 const material = new THREE.RawShaderMaterial({
     
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
-    
+    transparent: true
 
 })
 
