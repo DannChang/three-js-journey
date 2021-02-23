@@ -33,7 +33,7 @@ const material = new THREE.RawShaderMaterial({
     
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
-    wireframe: true
+    
 
 })
 
