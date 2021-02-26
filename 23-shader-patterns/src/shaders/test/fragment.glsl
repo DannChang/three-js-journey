@@ -109,14 +109,14 @@ void main()
     // float strength  = step(0.4, mod(vUv.x * 10.0, 1.0));
     // strength *= step(0.8, mod(vUv.y * 10.0, 1.0));
     
-    // //Pattern 14 - Right edge matrix (concatentate two Bar values)
-    // float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
-    // barX *= step(0.8, mod(vUv.y * 10.0, 1.0));
+    //Pattern 14 - Right edge matrix (concatentate two Bar values)
+    float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
+    barX *= step(0.8, mod(vUv.y * 10.0, 1.0));
 
-    // float barY  = step(0.8, mod(vUv.x * 10.0, 1.0));
-    // barY *= step(0.4, mod(vUv.y * 10.0, 1.0));
+    float barY  = step(0.8, mod(vUv.x * 10.0, 1.0));
+    barY *= step(0.4, mod(vUv.y * 10.0, 1.0));
 
-    // float strength = barX + barY;
+    float strength = barX + barY;
     
     // //Pattern 15 - Quest 2 Guardian barrier
     // float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
@@ -290,10 +290,12 @@ void main()
     // //Pattern 49 - Clustered Perlin Noise shape
     // float strength = sin(cnoise(vUv * 10.0) * 20.0);
 
-    //Pattern 50 - Sharper Clustered Perlin Noise shape
-    float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0));
+    // //Pattern 50 - Sharper Clustered Perlin Noise shape
+    // float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0));
 
 
+    // Clamp the strength **(Only for Extrapolated areas in #11, #14, )
+    strength = clamp(strength, 0.0, 1.0);
 
 
     // Colored Version
