@@ -101,7 +101,7 @@ const generateGalaxy = () =>
         vertexShader: galaxyVertexShader,
         fragmentShader: galaxyFragmentShader,
         uniforms: {
-            uSize: { value: 8 }
+            uSize: { value: 30 * renderer.getPixelRatio() }
         }
     })
 
@@ -112,7 +112,7 @@ const generateGalaxy = () =>
     scene.add(points)
 }
 
-generateGalaxy()
+
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
 gui.add(parameters, 'radius').min(0.01).max(20).step(0.01).onFinishChange(generateGalaxy)
@@ -121,7 +121,7 @@ gui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(gener
 gui.add(parameters, 'randomnessPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
-gui.add(material.uniforms.uSize, 'value').min(0).max(10).name('uSize')
+// gui.add(material.uniforms.uSize, 'value').min(0).max(10).name('uSize')
 
 /**
  * Sizes
@@ -146,6 +146,7 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+
 /**
  * Camera
  */
@@ -168,6 +169,11 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+/**
+ * Generate Galaxy
+ */
+generateGalaxy()
 
 /**
  * Animate
