@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.js'
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js'
 import * as dat from 'dat.gui'
 
 console.log(EffectComposer)
@@ -141,6 +142,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Post processing
  */
+// handles all the processes of creating the 'Render Target'
 const effectComposer = new EffectComposer(renderer) 
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 effectComposer.setSize(sizes.width, sizes.height)
@@ -149,10 +151,16 @@ effectComposer.setSize(sizes.width, sizes.height)
 const renderPass = new RenderPass(scene, camera)
 effectComposer.addPass(renderPass)
 
-// Dot Screen Pass
+    // Dot Screen Pass
 const dotScreenPass = new DotScreenPass()
+dotScreenPass.enabled = false
 effectComposer.addPass(dotScreenPass)
 
+    // Glitch Pass
+const glitchPass = new GlitchPass()
+// glitchPass.goWild = true 
+glitchPass.enabled = false
+effectComposer.addPass(glitchPass)
 
 /**
  * Animate
