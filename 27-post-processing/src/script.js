@@ -216,6 +216,41 @@ gui.add(unrealBloomPass, 'enabled').name('unrealBloomPass')
 gui.add(unrealBloomPass, 'strength').min(0).max(2).step(0.001)
 gui.add(unrealBloomPass, 'radius').min(0).max(2).step(0.001)
 gui.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001)
+
+/**
+ * Custom Pass with Shaders 
+ */
+// Shader Pass #1 - Tint pass
+const TintShader = {
+    uniforms: {
+        tDiffuse: { value: null }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+
+        void main() 
+        {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            
+            vUv = uv;
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+
+        varying vec2 vUv;
+
+        void main() 
+        {
+            vec4 color = texture2D(tDiffuse, vUv);
+            gl_FragColor = color;
+        }
+    `
+}
+const tintPass = new ShaderPass(TintShader)
+effectComposer.addPass(tintPass)
+
+
 /**
  * Animate
  */
