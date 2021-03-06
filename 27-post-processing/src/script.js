@@ -8,6 +8,8 @@ import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.j
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import * as dat from 'dat.gui'
 
 
@@ -110,6 +112,10 @@ window.addEventListener('resize', () =>
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Update Effec Composer
+    effectComposer.setSize(sizes.width, sizes.height)
+    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 /**
@@ -143,7 +149,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Post processing
  */
+
+
 // Render Target
+let RenderTargetClass = null
+if(renderer.getPixelRatio() === 1 && renderer.capabilities.isWebGL2) {
+    RenderTargetClass = THREE.WebGLMultisampleRenderTarget
+    console.log('Using WebGLMultisampleRenderTarget')
+} else {
+    RenderTargetClass = THREE.WebGLRenderTarget
+    console.log('Using WebGLRenderTarget')
+}
+
 const renderTarget = new THREE.WebGLRenderTarget(
     800,
     600,    
@@ -176,9 +193,29 @@ const glitchPass = new GlitchPass()
 glitchPass.enabled = false
 effectComposer.addPass(glitchPass)
 
+// 3D glasses effect
 const rgbShiftPass = new ShaderPass(RGBShiftShader)
+rgbShiftPass.enabled = false
 effectComposer.addPass(rgbShiftPass)
 
+// Anti-alias fix pass (fixes anti-aliasing, but bad performance)
+if(renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2) {
+    const smaaPass = new SMAAPass()
+    effectComposer.addPass(smaaPass)
+
+    console.log('Using SMAA')
+}
+
+const unrealBloomPass = new UnrealBloomPass()
+unrealBloomPass.strength = 0.3
+unrealBloomPass.radius = 1
+unrealBloomPass.threshold = 0.6 
+effectComposer.addPass(unrealBloomPass)
+
+gui.add(unrealBloomPass, 'enabled').name('unrealBloomPass')
+gui.add(unrealBloomPass, 'strength').min(0).max(2).step(0.001)
+gui.add(unrealBloomPass, 'radius').min(0).max(2).step(0.001)
+gui.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001)
 /**
  * Animate
  */
