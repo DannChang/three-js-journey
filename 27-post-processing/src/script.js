@@ -6,9 +6,10 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.js'
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
+import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
 import * as dat from 'dat.gui'
 
-console.log(EffectComposer)
 
 /**
  * Base
@@ -133,7 +134,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFShadowMap
 renderer.physicallyCorrectLights = true
-renderer.outputEncoding = THREE.sRGBEncoding
+// renderer.outputEncoding = THREE.sRGBEncoding
 renderer.toneMapping = THREE.ReinhardToneMapping
 renderer.toneMappingExposure = 1.5
 renderer.setSize(sizes.width, sizes.height)
@@ -142,8 +143,21 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Post processing
  */
+// Render Target
+const renderTarget = new THREE.WebGLRenderTarget(
+    800,
+    600,    
+    {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat,
+        encoding: THREE.sRGBEncoding
+    }
+)
+
+
 // handles all the processes of creating the 'Render Target'
-const effectComposer = new EffectComposer(renderer) 
+const effectComposer = new EffectComposer(renderer, renderTarget) 
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 effectComposer.setSize(sizes.width, sizes.height)
 
@@ -161,6 +175,9 @@ const glitchPass = new GlitchPass()
 // glitchPass.goWild = true 
 glitchPass.enabled = false
 effectComposer.addPass(glitchPass)
+
+const rgbShiftPass = new ShaderPass(RGBShiftShader)
+effectComposer.addPass(rgbShiftPass)
 
 /**
  * Animate
