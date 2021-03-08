@@ -1,19 +1,47 @@
 import './style.css'
 import * as THREE from 'three'
+import * as dat from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { gsap } from 'gsap'
+import { getUnit } from 'gsap/gsap-core'
 
 /**
  * Loaders
  */
-const gltfLoader = new GLTFLoader()
-const cubeTextureLoader = new THREE.CubeTextureLoader()
+const loadingBarElement = document.querySelector('.loading-bar')
+
+const loadingManager = new THREE.LoadingManager(
+        // Loaded
+        () =>
+        {
+            window.setTimeout(() => {
+                gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 })
+    
+                loadingBarElement.classList.add('ended')
+                loadingBarElement.style.transform = ''
+            }, 500)
+        },
+    
+        // Progress
+        (itemUrl, itemsLoaded, itemsTotal) =>
+        {
+            // // Progress of files loaded in console
+            // console.log(itemUrl, itemsLoaded, itemsTotal)
+        
+            const progressRatio = itemsLoaded / itemsTotal;
+            loadingBarElement.style.transform = `scaleX(${progressRatio})`
+        }
+)
+const gltfLoader = new GLTFLoader(loadingManager)
+const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
 
 /**
  * Base
  */
 // Debug
 const debugObject = {}
+const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -24,10 +52,33 @@ const scene = new THREE.Scene()
 /**
  * Overlay
  */
-const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1)
-const overlayMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } )
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        uAlpha: { value: 1 }
+    },
+    // wireframe: true,
+    transparent: true,
+    vertexShader: `
+    void main()
+    {
+        gl_Position = vec4(position, 1.0);
+    }
+    `,
+    fragmentShader: `
+    uniform float uAlpha;
+
+    void main()
+    {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+    }
+    `
+})
 const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
 scene.add(overlay)
+
+gui.add(overlayMaterial.uniforms.uAlpha, 'value').min(0).max(1).name('uAlpha')
+
 /**
  * Update all materials
  */
