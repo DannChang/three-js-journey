@@ -131,6 +131,7 @@ gltfLoader.load(
         gltf.scene.scale.set(2.5, 2.5, 2.5)
         gltf.scene.rotation.y = Math.PI * 0.5
         scene.add(gltf.scene)
+        console.log(gltf.scene)
 
         updateAllMaterials()
     }
@@ -217,6 +218,8 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+console.log(scene.children[3])
 
 /**
  * Animate
