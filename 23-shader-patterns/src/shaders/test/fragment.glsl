@@ -110,13 +110,13 @@ void main()
     // strength *= step(0.8, mod(vUv.y * 10.0, 1.0));
     
     //Pattern 14 - Right edge matrix (concatentate two Bar values)
-    float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
-    barX *= step(0.8, mod(vUv.y * 10.0, 1.0));
+    // float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
+    // barX *= step(0.8, mod(vUv.y * 10.0, 1.0));
 
-    float barY  = step(0.8, mod(vUv.x * 10.0, 1.0));
-    barY *= step(0.4, mod(vUv.y * 10.0, 1.0));
+    // float barY  = step(0.8, mod(vUv.x * 10.0, 1.0));
+    // barY *= step(0.4, mod(vUv.y * 10.0, 1.0));
 
-    float strength = barX + barY;
+    // float strength = barX + barY;
     
     // //Pattern 15 - Quest 2 Guardian barrier
     // float barX  = step(0.4, mod(vUv.x * 10.0, 1.0));
@@ -295,14 +295,14 @@ void main()
 
 
     // Clamp the strength **(Only for Extrapolated areas in #11, #14, )
-    strength = clamp(strength, 0.0, 1.0);
+    // strength = clamp(strength, 0.0, 1.0);
 
 
     // Colored Version
-    vec3 blackColor = vec3(0.0);
-    vec3 uvColor = vec3(vUv, 1.0);
-    vec3 mixedColor = mix(blackColor, uvColor, strength);
-    gl_FragColor = vec4(mixedColor, 1.0);
+    // vec3 blackColor = vec3(0.0);
+    // vec3 uvColor = vec3(vUv, 1.0);
+    // vec3 mixedColor = mix(blackColor, uvColor, strength);
+    // gl_FragColor = vec4(mixedColor, 1.0);
 
     // Black and white version
     // gl_FragColor = vec4(strength, strength, strength, 1.0);
